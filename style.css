@@ -1,0 +1,1186 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Press Start 2P', monospace;
+    background: #1a1a1a;
+    min-height: 100vh;
+    padding: 10px;
+    color: #fff;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+}
+
+.game-container {
+    max-width: 1600px;
+    margin: 0 auto;
+    background: #2d2d2d;
+    border: 4px solid #555;
+    padding: 20px;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 3px solid #555;
+}
+
+header h1 {
+    font-size: 1.5em;
+    color: #ffd700;
+    margin-bottom: 15px;
+    text-shadow: 2px 2px 0px #000;
+}
+
+.header-stats {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 15px;
+    position: relative;
+}
+
+.header-stats .prestige-btn,
+.header-stats .reset-btn {
+    margin-left: 10px;
+}
+
+.prestige-btn {
+    background: #ffd700;
+    color: #000;
+    border: 2px solid #ffed4e;
+    padding: 8px 16px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.6em;
+    cursor: pointer;
+    transition: all 0.1s;
+    font-weight: bold;
+}
+
+.prestige-btn:hover {
+    background: #ffed4e;
+    transform: translate(1px, 1px);
+}
+
+/* Ore Breakdown */
+.ore-breakdown {
+    background: #1a1a1a;
+    border: 2px solid #555;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 4px;
+}
+
+.ore-breakdown h3 {
+    font-size: 0.7em;
+    color: #ffd700;
+    margin-bottom: 8px;
+    text-align: center;
+}
+
+.ore-breakdown-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.ore-breakdown-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.5em;
+    padding: 4px;
+    background: #2a2a2a;
+    border: 1px solid #444;
+}
+
+.ore-breakdown-emoji {
+    font-size: 1.2em;
+    width: 24px;
+    text-align: center;
+}
+
+.ore-breakdown-name {
+    flex: 1;
+    color: #ccc;
+}
+
+.ore-breakdown-chance {
+    color: #8bff5a;
+    min-width: 80px;
+    text-align: left;
+    font-size: 0.9em;
+}
+
+.ore-breakdown-chance-percent {
+    color: #ffaa5a;
+    min-width: 50px;
+    text-align: left;
+    font-size: 0.9em;
+}
+
+.ore-breakdown-value {
+    color: #ffd700;
+    min-width: 60px;
+    text-align: left;
+}
+
+.ore-breakdown-gps {
+    color: #8bff5a;
+    min-width: 70px;
+    text-align: left;
+    font-size: 0.9em;
+    font-weight: bold;
+}
+
+.ore-breakdown-efficiency {
+    background: rgba(78, 205, 196, 0.1);
+    border: 1px solid rgba(78, 205, 196, 0.3);
+    border-radius: 4px;
+    margin-bottom: 8px;
+}
+
+.stat-header {
+    display: flex;
+    gap: 8px;
+    font-size: 0.7em;
+    color: #ccc;
+}
+
+.stat-header span:last-child {
+    color: #ffd700;
+}
+
+.reset-btn {
+    background: #8b0000;
+    color: #fff;
+    border: 2px solid #a00;
+    padding: 8px 16px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.6em;
+    cursor: pointer;
+    transition: all 0.1s;
+}
+
+.reset-btn:hover {
+    background: #a00;
+    transform: translate(1px, 1px);
+}
+
+.main-content {
+    display: flex;
+    gap: 20px;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 280px;
+    background: #1a1a1a;
+    border: 3px solid #555;
+    padding: 15px;
+    transition: margin-left 0.3s;
+    position: relative;
+}
+
+.sidebar.collapsed {
+    margin-left: -240px;
+}
+
+.sidebar-toggle {
+    position: absolute;
+    right: -30px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #555;
+    color: #fff;
+    border: 2px solid #777;
+    width: 30px;
+    height: 60px;
+    cursor: pointer;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.7em;
+    z-index: 100;
+}
+
+.sidebar-toggle:hover {
+    background: #666;
+}
+
+.sidebar-content {
+    max-height: calc(100vh - 200px);
+    overflow-y: auto;
+}
+
+.shop-section {
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #444;
+}
+
+.shop-section h2 {
+    font-size: 0.7em;
+    color: #ffd700;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+.shop-button {
+    width: 100%;
+    padding: 12px;
+    background: #333;
+    color: #fff;
+    border: 2px solid #555;
+    font-size: 0.6em;
+    cursor: pointer;
+    transition: all 0.1s;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    text-align: left;
+}
+
+.shop-button:hover:not(:disabled) {
+    background: #444;
+    border-color: #ffd700;
+}
+
+.shop-button:active:not(:disabled) {
+    transform: translate(1px, 1px);
+}
+
+.shop-button:disabled {
+    background: #1a1a1a;
+    border-color: #333;
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.shop-button.owned {
+    background: #1a1a1a;
+    border-color: #333;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.shop-button.owned .button-text,
+.shop-button.owned .price {
+    color: #666;
+}
+
+.shop-button .price {
+    color: #ffd700;
+    margin-left: auto;
+}
+
+/* Mining Container */
+.horde-timer-overlay {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.8);
+    border: 3px solid #ff6b6b;
+    padding: 10px 15px;
+    border-radius: 5px;
+    color: #ff6b6b;
+    font-size: 0.7em;
+    z-index: 50;
+    pointer-events: none;
+    text-shadow: 2px 2px 0px #000;
+    box-shadow: 0 0 10px rgba(255, 107, 107, 0.5);
+}
+
+.horde-timer-overlay span {
+    margin-right: 5px;
+}
+
+.mining-container {
+    flex: 1;
+    position: relative;
+    background: #252525;
+    border: 3px solid #555;
+    min-height: 600px;
+    overflow: hidden;
+}
+
+/* Central Rock */
+.central-rock {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 200px;
+    height: 200px;
+    cursor: pointer;
+    user-select: none;
+    transition: transform 0.1s;
+    z-index: 5;
+}
+
+.central-rock:active {
+    transform: translate(-50%, -50%) scale(0.95);
+}
+
+.rock-content {
+    font-size: 120px;
+    text-align: center;
+    line-height: 200px;
+    filter: drop-shadow(4px 4px 8px rgba(0, 0, 0, 0.8));
+}
+
+.click-effect {
+    position: absolute;
+    pointer-events: none;
+    font-size: 1.2em;
+    color: #ffd700;
+    font-weight: bold;
+    opacity: 0;
+    transform: translate(-50%, -50%);
+    transition: all 0.3s ease-out;
+    z-index: 30;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.click-effect.active {
+    opacity: 1;
+    transform: translate(-50%, -80px);
+}
+
+.auto-clickers-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 20;
+}
+
+.auto-clicker-indicator {
+    position: absolute;
+    pointer-events: none;
+    font-size: 24px;
+    z-index: 25;
+    transition: transform 0.1s;
+}
+
+.auto-clicker-indicator.clicking {
+    transform: scale(1.3) translateY(-5px);
+}
+
+/* Ores */
+.ores-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.ore {
+    position: absolute;
+    font-size: 40px;
+    pointer-events: none;
+    animation: oreGlow 2s infinite;
+    filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.8));
+    z-index: 3;
+}
+
+@keyframes oreGlow {
+    0%, 100% { filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.8)) brightness(1); }
+    50% { filter: drop-shadow(2px 2px 8px rgba(255, 215, 0, 0.6)) brightness(1.2); }
+}
+
+/* Dwarves */
+.dwarves-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 4;
+}
+
+.dwarf {
+    position: absolute;
+    font-size: 30px;
+    filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.8));
+    animation: dwarfWalk 0.5s infinite;
+    z-index: 4;
+    transition: left 0.05s ease-out, top 0.05s ease-out;
+}
+
+.dwarf.carrying {
+    animation: dwarfCarry 0.3s infinite;
+    transform: scale(1.1);
+}
+
+.dwarf.mining {
+    animation: dwarfMining 0.3s infinite;
+}
+
+@keyframes dwarfWalk {
+    0%, 100% { transform: rotate(-5deg); }
+    50% { transform: rotate(5deg); }
+}
+
+@keyframes dwarfMining {
+    0%, 100% { transform: translateY(0) rotate(-10deg); }
+    50% { transform: translateY(-5px) rotate(10deg); }
+}
+
+@keyframes dwarfCarry {
+    0%, 100% { transform: scale(1.1) translateY(0px); }
+    50% { transform: scale(1.1) translateY(-3px); }
+}
+
+/* Minecarts */
+.minecarts-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 6;
+}
+
+.minecart {
+    pointer-events: auto; /* Allow clicks on minecart itself */
+}
+
+.repair-minecart-btn {
+    pointer-events: auto !important;
+    position: relative;
+    z-index: 1000 !important; /* Very high z-index to ensure it's on top */
+    transition: none !important; /* Prevent transitions that cause flashing */
+    margin-top: 5px !important;
+    display: block; /* Ensure button takes full width and doesn't overlap */
+    box-sizing: border-box;
+    flex-shrink: 0; /* Prevent button from shrinking */
+    cursor: pointer !important;
+    user-select: none; /* Prevent text selection on click */
+}
+
+.minecart-destroyed {
+    opacity: 0.5 !important;
+    filter: grayscale(100%) !important;
+}
+
+.repair-minecart-btn:hover {
+    opacity: 0.9;
+    /* Removed transform to prevent flashing when button is recreated */
+}
+
+/* Soldiers */
+.soldiers-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 5;
+}
+
+.soldier {
+    position: absolute;
+    font-size: 30px;
+    filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.8));
+    animation: soldierWalk 0.5s infinite;
+    z-index: 5;
+    transition: left 0.05s ease-out, top 0.05s ease-out;
+}
+
+.soldier.attacking {
+    animation: soldierAttack 0.3s infinite;
+}
+
+@keyframes soldierWalk {
+    0%, 100% { transform: rotate(-5deg); }
+    50% { transform: rotate(5deg); }
+}
+
+@keyframes soldierAttack {
+    0%, 100% { transform: translateX(0) rotate(-15deg); }
+    50% { transform: translateX(5px) rotate(15deg); }
+}
+
+/* Enemies */
+.enemies-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 4;
+}
+
+.enemy {
+    position: absolute;
+    font-size: 30px;
+    filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.8));
+    animation: enemyMove 0.6s infinite;
+    z-index: 4;
+    transition: left 0.05s ease-out, top 0.05s ease-out;
+}
+
+.enemy.attacking {
+    animation: enemyAttack 0.4s infinite;
+}
+
+@keyframes enemyMove {
+    0%, 100% { transform: translateY(0) rotate(-3deg); }
+    50% { transform: translateY(-2px) rotate(3deg); }
+}
+
+@keyframes enemyAttack {
+    0%, 100% { transform: scale(1) rotate(-10deg); }
+    50% { transform: scale(1.1) rotate(10deg); }
+}
+
+.minecart {
+    position: absolute;
+    display: flex;
+    align-items: flex-start; /* Changed from center to flex-start to prevent overlap */
+    gap: 10px;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 8px;
+    border: 2px solid #555;
+    border-radius: 4px;
+    overflow: visible; /* Ensure buttons are clickable */
+}
+
+.minecart-icon {
+    font-size: 24px;
+}
+
+.minecart-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 120px; /* Ensure consistent width for buttons */
+}
+
+.minecart-counter {
+    font-size: 0.5em;
+    color: #fff;
+}
+
+.minecart-bar {
+    width: 100px;
+    height: 8px;
+    background: #333;
+    border: 1px solid #555;
+    overflow: hidden;
+}
+
+.minecart-bar-fill {
+    height: 100%;
+    background: #ffd700;
+    transition: width 0.3s;
+}
+
+.minecart-delivering {
+    opacity: 0.5;
+    filter: grayscale(50%);
+}
+
+.minecart-delivery-bar {
+    width: 100px;
+    height: 8px;
+    background: #333;
+    border: 1px solid #555;
+    overflow: hidden;
+    margin-top: 4px;
+}
+
+.minecart-delivery-bar-fill {
+    height: 100%;
+    background: #4ecdc4;
+    transition: width 0.1s;
+}
+
+/* Auto-clicker list */
+.upgrade-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.auto-clicker-item {
+    background: #2a2a2a;
+    border: 2px solid #444;
+    padding: 10px;
+    font-size: 0.6em;
+}
+
+.clicker-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    color: #ccc;
+}
+
+.clicker-speed {
+    color: #ffd700;
+}
+
+.upgrade-clicker-btn {
+    width: 100%;
+    padding: 8px;
+    background: #333;
+    color: #fff;
+    border: 2px solid #555;
+    font-size: 0.5em;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.1s;
+}
+
+.upgrade-clicker-btn:hover:not(:disabled) {
+    background: #444;
+    border-color: #ffd700;
+}
+
+.upgrade-clicker-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.upgrade-clicker-btn .price {
+    color: #ffd700;
+}
+
+/* Scrollbar */
+.sidebar-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.sidebar-content::-webkit-scrollbar-track {
+    background: #1a1a1a;
+}
+
+.sidebar-content::-webkit-scrollbar-thumb {
+    background: #555;
+    border-radius: 4px;
+}
+
+.sidebar-content::-webkit-scrollbar-thumb:hover {
+    background: #666;
+}
+
+/* Gambling Wheel Modal */
+.gamble-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.gamble-modal-content {
+    background: #2a2a2a;
+    border: 3px solid #555;
+    border-radius: 10px;
+    padding: 30px;
+    text-align: center;
+    max-width: 500px;
+    width: 90%;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+.gamble-modal-content h2 {
+    color: #ffd700;
+    margin-bottom: 20px;
+    font-size: 1.5em;
+}
+
+.slot-machine-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+    width: 100%;
+}
+
+.slot-machine-main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    position: relative;
+    width: 100%;
+}
+
+.slot-odds {
+    background: rgba(0, 0, 0, 0.6);
+    border: 2px solid #666;
+    padding: 10px 15px;
+    border-radius: 4px;
+    font-size: 0.9em;
+    min-width: 200px;
+    text-align: center;
+}
+
+.odds-title {
+    font-weight: bold;
+    color: #ffd700;
+    margin-bottom: 8px;
+    text-align: center;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.odds-item {
+    color: #fff;
+    margin: 4px 0;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.odds-item span {
+    color: #4a90e2;
+    font-weight: bold;
+}
+
+.luck-upgrade-container {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.luck-button {
+    width: 100%;
+    margin-top: 10px;
+}
+
+.slot-reels {
+    width: 200px;
+    height: 120px;
+    background: #222;
+    border: 3px solid #666;
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8);
+    /* Clip to show only one item at a time */
+    clip-path: inset(0 0 0 0);
+}
+
+.slot-reel {
+    width: 100%;
+    position: relative;
+    overflow: visible;
+    will-change: transform;
+    display: flex;
+    flex-direction: column;
+    min-height: 480px; /* Ensure enough height for 4 sets of items (4 * 4 * 120px) */
+}
+
+.reel-item {
+    width: 100%;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #888;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    border-bottom: 1px solid #333;
+    transition: color 0.1s ease, background 0.1s ease;
+    flex-shrink: 0;
+}
+
+.reel-item-blue {
+    background: rgba(59, 130, 246, 0.3); /* Blue background for 1K */
+}
+
+.reel-item-green {
+    background: rgba(34, 197, 94, 0.3); /* Green background for 5K */
+}
+
+.reel-item-red {
+    background: rgba(239, 68, 68, 0.3); /* Red background for 10K and 50 ores */
+}
+
+.reel-item-purple {
+    background: rgba(168, 85, 247, 0.3); /* Purple background for 100 ores (super rare) */
+}
+
+.reel-item-yellow {
+    background: rgba(234, 179, 8, 0.3); /* Yellow background for 2x gold multiplier */
+}
+
+/* Multiplier Effect Styles */
+.multiplier-effect-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 30;
+    overflow: hidden;
+}
+
+.multiplier-timer {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    border: 3px solid #ffd700;
+    border-radius: 10px;
+    padding: 15px 25px;
+    text-align: center;
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+    animation: multiplier-pulse 1s ease-in-out infinite;
+}
+
+.multiplier-text {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #ffd700;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    margin-bottom: 5px;
+}
+
+.multiplier-time {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #fff;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+@keyframes multiplier-pulse {
+    0%, 100% {
+        box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+        transform: translateX(-50%) scale(1);
+    }
+    50% {
+        box-shadow: 0 0 30px rgba(255, 215, 0, 0.9);
+        transform: translateX(-50%) scale(1.05);
+    }
+}
+
+.falling-money {
+    position: absolute;
+    user-select: none;
+    will-change: top, opacity;
+}
+
+.reel-item.highlighted {
+    color: #ffd700;
+    background: rgba(255, 215, 0, 0.2);
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.8), 2px 2px 4px rgba(0, 0, 0, 0.8);
+    animation: highlight-pulse 0.5s ease-in-out;
+}
+
+@keyframes highlight-pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+/* Spinning animation removed - we use transform on the reel container instead */
+
+.slot-handle-container {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 200px;
+    z-index: 10;
+}
+
+.slot-handle {
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    cursor: pointer;
+    position: relative;
+    width: 60px;
+    height: 180px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transform-origin: bottom center;
+    transition: transform 0.1s ease;
+    outline: none;
+    box-shadow: none;
+    color: transparent !important;
+    font-size: 0 !important;
+    text-indent: -9999px !important;
+    overflow: visible;
+}
+
+.slot-handle::before,
+.slot-handle::after {
+    display: none !important;
+}
+
+.slot-handle:hover:not(:disabled) {
+    transform: rotate(-2deg);
+}
+
+.slot-handle:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.slot-handle.pulling {
+    animation: pull-handle 0.4s ease-out;
+}
+
+@keyframes pull-handle {
+    0% { transform: rotate(0deg) translateY(0); }
+    50% { transform: rotate(25deg) translateY(20px); }
+    100% { transform: rotate(0deg) translateY(0); }
+}
+
+/* Red handle ball at the top */
+.handle-top {
+    width: 50px;
+    height: 50px;
+    background: radial-gradient(circle at 30% 30%, #ff4444, #cc0000);
+    border: 3px solid #990000;
+    border-radius: 50%;
+    box-shadow: 
+        0 4px 8px rgba(0, 0, 0, 0.6),
+        inset -5px -5px 10px rgba(0, 0, 0, 0.4),
+        inset 5px 5px 10px rgba(255, 255, 255, 0.2);
+    position: relative;
+    z-index: 2;
+    flex-shrink: 0;
+}
+
+.handle-top::after {
+    content: '';
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    width: 20px;
+    height: 20px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.4), transparent);
+    border-radius: 50%;
+}
+
+/* Handle arm/lever */
+.handle-stem {
+    width: 16px;
+    height: 100px;
+    background: linear-gradient(90deg, #666, #555, #666);
+    border-left: 2px solid #444;
+    border-right: 2px solid #777;
+    box-shadow: 
+        inset -2px 0 4px rgba(0, 0, 0, 0.5),
+        inset 2px 0 4px rgba(255, 255, 255, 0.1);
+    margin-top: -5px;
+    position: relative;
+    z-index: 1;
+    flex-shrink: 0;
+}
+
+/* Base/mounting point */
+.handle-base {
+    width: 40px;
+    height: 30px;
+    background: linear-gradient(135deg, #555, #333);
+    border: 2px solid #222;
+    border-radius: 4px;
+    box-shadow: 
+        0 4px 8px rgba(0, 0, 0, 0.5),
+        inset 0 2px 4px rgba(0, 0, 0, 0.3);
+    margin-top: -5px;
+    position: relative;
+    z-index: 0;
+    flex-shrink: 0;
+}
+
+.handle-base::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 8px;
+    background: #444;
+    border-radius: 2px;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.wheel-segment {
+    position: absolute;
+    width: 50%;
+    height: 50%;
+    pointer-events: none;
+    overflow: visible;
+}
+
+/* Anchor points at center of each segment */
+.segment-anchor {
+    position: absolute;
+    width: 0;
+    height: 0;
+    z-index: 2;
+    pointer-events: none;
+    transform-origin: center center;
+}
+
+.segment-text {
+    font-weight: bold;
+    color: #fff;
+    text-shadow: 3px 3px 8px rgba(0, 0, 0, 1), -1px -1px 3px rgba(0, 0, 0, 0.9);
+    font-size: 1.1em;
+    white-space: nowrap;
+    position: absolute;
+    display: block;
+    /* Text positioned relative to anchor, rotated so bottom faces center */
+}
+
+/* Position 4 segments at 90 degree intervals */
+.wheel-segment.segment-1 { 
+    top: 0; 
+    left: 50%; 
+    transform: translateX(-50%);
+    transform-origin: 50% 100%;
+}
+
+.wheel-segment.segment-2 { 
+    top: 50%; 
+    right: 0; 
+    transform: translateY(-50%) rotate(90deg);
+    transform-origin: 0% 50%;
+}
+
+.wheel-segment.segment-3 { 
+    bottom: 0; 
+    left: 50%; 
+    transform: translateX(-50%) rotate(180deg);
+    transform-origin: 50% 0%;
+}
+
+.wheel-segment.segment-4 { 
+    top: 50%; 
+    left: 0; 
+    transform: translateY(-50%) rotate(270deg);
+    transform-origin: 100% 50%;
+}
+
+/* Anchor points at center of each segment (at 45deg, 135deg, 225deg, 315deg from center) */
+/* Each anchor is positioned at the center of its 90-degree segment */
+/* Text is positioned below anchor and rotated so bottom of emoji faces center */
+
+.anchor-1 {
+    /* Top segment center - at 45° from top (up-right direction) */
+    top: 50%;
+    left: 50%;
+    /* Position at center of top segment: 30% of radius at 45° angle */
+    transform: translate(-50%, -50%) translate(21.2%, -21.2%);
+}
+.anchor-1 .segment-text {
+    /* Position text outward from anchor (away from center), rotate 180° so bottom of emoji faces center */
+    transform: translate(-50%, -80px) rotate(180deg);
+    text-align: center;
+}
+
+.anchor-2 {
+    /* Right segment center - at 135° from top (down-right direction) */
+    top: 50%;
+    left: 50%;
+    /* Position at center of right segment: 30% of radius at 135° angle */
+    transform: translate(-50%, -50%) translate(21.2%, 21.2%);
+}
+.anchor-2 .segment-text {
+    /* Position text outward from anchor (away from center), rotate so bottom faces center */
+    transform: translate(-50%, -80px) rotate(180deg);
+    text-align: center;
+}
+
+.anchor-3 {
+    /* Bottom segment center - at 225° from top (down-left direction) */
+    top: 50%;
+    left: 50%;
+    /* Position at center of bottom segment: 30% of radius at 225° angle */
+    transform: translate(-50%, -50%) translate(-21.2%, 21.2%);
+}
+.anchor-3 .segment-text {
+    /* Position text outward from anchor (away from center), rotate so bottom faces center */
+    transform: translate(-50%, -80px) rotate(180deg);
+    text-align: center;
+}
+
+.anchor-4 {
+    /* Left segment center - at 315° from top (up-left direction) */
+    top: 50%;
+    left: 50%;
+    /* Position at center of left segment: 30% of radius at 315° angle */
+    transform: translate(-50%, -50%) translate(-21.2%, -21.2%);
+}
+.anchor-4 .segment-text {
+    /* Position text outward from anchor (away from center), rotate so bottom faces center */
+    transform: translate(-50%, -80px) rotate(180deg);
+    text-align: center;
+}
+
+.wheel-pointer {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-top: 30px solid #ffd700;
+    z-index: 10;
+}
+
+.gamble-result {
+    margin: 20px 0;
+    min-height: 40px;
+    font-size: 1.2em;
+}
+
+.gamble-success {
+    color: #4ecdc4;
+    font-weight: bold;
+    animation: pulse 0.5s ease-in-out;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+.gamble-button {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.gamble-button:hover:not(:disabled) {
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 200px;
+    }
+    
+    .wheel-container {
+        width: 250px;
+        height: 250px;
+    }
+}

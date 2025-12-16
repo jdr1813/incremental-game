@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mining Clicker</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-container">
+        <header>
+            <h1>⛏️ Mining Clicker</h1>
+            <div class="header-stats">
+                <div class="stat-header">
+                    <span>Gold:</span>
+                    <span id="coins">0</span>
+                </div>
+                <div class="stat-header">
+                    <span>Gold/Min:</span>
+                    <span id="coins-per-minute">0</span>
+                </div>
+                <div class="stat-header">
+                    <span>Dwarves:</span>
+                    <span id="dwarf-count">0</span>
+                </div>
+                <div class="stat-header">
+                    <span>Minecarts:</span>
+                    <span id="minecart-count">0</span>
+                </div>
+                <div class="stat-header">
+                    <span>Soldiers:</span>
+                    <span id="soldier-count">0</span>
+                </div>
+                <div class="stat-header">
+                    <span>Enemies:</span>
+                    <span id="enemy-count">0</span>
+                </div>
+                <button id="open-prestige" class="prestige-btn">⭐ Prestige</button>
+                <button id="reset-btn" class="reset-btn">Reset</button>
+            </div>
+            <!-- Ore Breakdown Display -->
+            <div id="ore-breakdown" class="ore-breakdown" style="display: none;">
+                <h3>Ore Breakdown</h3>
+                <div id="ore-breakdown-list" class="ore-breakdown-list">
+                    <!-- Ore stats will be generated here -->
+                </div>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <!-- Sidebar with Upgrades -->
+            <div class="sidebar" id="sidebar">
+                <button class="sidebar-toggle" id="sidebar-toggle">◀</button>
+                <div class="sidebar-content">
+                    <div class="shop-section">
+                        <h2>Click Upgrades</h2>
+                        <button id="upgrade-click-power" class="shop-button">
+                            <span class="button-text">Click Power <span id="click-power-value">(1)</span></span>
+                            <span class="price" id="click-power-price">50</span>
+                        </button>
+                        <button id="buy-auto-clicker" class="shop-button">
+                            <span class="button-text">Buy Auto-Clicker</span>
+                            <span class="price" id="auto-clicker-price">100</span>
+                        </button>
+                        <button id="upgrade-auto-clicker-speed" class="shop-button">
+                            <span class="button-text">Auto-Clicker Speed <span id="auto-clicker-speed-display">(0.5/sec)</span></span>
+                            <span class="price" id="auto-clicker-speed-price">150</span>
+                        </button>
+                    </div>
+
+                    <div class="shop-section">
+                        <h2>Auto-Clickers</h2>
+                        <div id="auto-clickers-list" class="upgrade-list">
+                            <!-- Auto-clickers will be generated here -->
+                        </div>
+                    </div>
+
+                    <div class="shop-section">
+                        <h2>Dwarves</h2>
+                        <button id="hire-dwarf" class="shop-button">
+                            <span class="button-text">Hire Dwarf</span>
+                            <span class="price" id="dwarf-price">25</span>
+                        </button>
+                        <button id="upgrade-dwarf-speed" class="shop-button">
+                            <span class="button-text">Dwarf Speed</span>
+                            <span class="price" id="dwarf-speed-price">150</span>
+                        </button>
+                    </div>
+
+                    <div class="shop-section">
+                        <h2>Soldiers</h2>
+                        <button id="hire-soldier" class="shop-button">
+                            <span class="button-text">Hire Soldier</span>
+                            <span class="price" id="soldier-price">100</span>
+                        </button>
+                        <button id="upgrade-soldier-attack-power" class="shop-button">
+                            <span class="button-text">Attack Power</span>
+                            <span class="price" id="soldier-attack-power-price">200</span>
+                        </button>
+                        <button id="upgrade-soldier-attack-speed" class="shop-button">
+                            <span class="button-text">Attack Speed</span>
+                            <span class="price" id="soldier-attack-speed-price">250</span>
+                        </button>
+                        <button id="upgrade-soldier-speed" class="shop-button">
+                            <span class="button-text">Movement Speed</span>
+                            <span class="price" id="soldier-speed-price">600</span>
+                        </button>
+                    </div>
+
+                    <div class="shop-section">
+                        <h2>Ores</h2>
+                        <div id="ore-shop" class="ore-shop">
+                            <!-- Ore unlocks and upgrades will be generated here -->
+                        </div>
+                        <button id="upgrade-ore-value" class="shop-button">
+                            <span class="button-text">All Ore Value</span>
+                            <span class="price" id="ore-value-price">300</span>
+                        </button>
+                        <button id="upgrade-ore-spawn-efficiency" class="shop-button">
+                            <span class="button-text">Spawn Efficiency</span>
+                            <span class="price" id="ore-spawn-efficiency-price">500</span>
+                        </button>
+                    </div>
+
+                    <div class="shop-section">
+                        <h2>Minecarts</h2>
+                        <button id="buy-minecart" class="shop-button">
+                            <span class="button-text">Buy Minecart</span>
+                            <span class="price" id="minecart-price">500</span>
+                        </button>
+                        <button id="upgrade-minecart-capacity" class="shop-button">
+                            <span class="button-text">Minecart Capacity</span>
+                            <span class="price" id="minecart-capacity-price">5000</span>
+                        </button>
+                        <button id="upgrade-minecart-delivery-speed" class="shop-button">
+                            <span class="button-text">Delivery Speed</span>
+                            <span class="price" id="minecart-delivery-speed-price">800</span>
+                        </button>
+                        <button id="upgrade-minecart-turrets" class="shop-button">
+                            <span class="button-text">🔫 Turrets</span>
+                            <span class="price" id="minecart-turret-price">5000000</span>
+                        </button>
+                    </div>
+
+                    <div class="shop-section">
+                        <h2>Gambling</h2>
+                        <button id="gamble-wheel" class="shop-button gamble-button">
+                            <span class="button-text">🎰 Spin the Wheel</span>
+                            <span class="price" id="gamble-price">6000</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Center Mining Area -->
+            <div class="mining-container" id="mining-container">
+                <!-- Horde Timer -->
+                <div id="horde-timer" class="horde-timer-overlay" style="display: none;">
+                    <span>⚠️ Horde in:</span>
+                    <span id="horde-time">--:--</span>
+                </div>
+                <!-- Central Rock -->
+                <div id="central-rock" class="central-rock">
+                    <div class="rock-content">⛰️</div>
+                    <div class="click-effect" id="click-effect"></div>
+                </div>
+                
+                <!-- Ores Container -->
+                <div id="ores-container" class="ores-container">
+                    <!-- Ores will spawn here -->
+                </div>
+                
+                <!-- Auto-Clicker Indicators Container -->
+                <div id="auto-clickers-container" class="auto-clickers-container">
+                    <!-- Auto-clicker indicators will be rendered here -->
+                </div>
+                
+                <!-- Dwarves Container -->
+                <div id="dwarves-container" class="dwarves-container">
+                    <!-- Dwarves will be rendered here -->
+                </div>
+                
+                <!-- Minecarts Container -->
+                <div id="minecarts-container" class="minecarts-container">
+                    <!-- Minecarts will be rendered here -->
+                </div>
+                
+                <!-- Soldiers Container -->
+                <div id="soldiers-container" class="soldiers-container">
+                    <!-- Soldiers will be rendered here -->
+                </div>
+                
+                <!-- Enemies Container -->
+                <div id="enemies-container" class="enemies-container">
+                    <!-- Enemies will be rendered here -->
+                </div>
+                
+                <!-- Multiplier Effect Container -->
+                <div id="multiplier-effect-container" class="multiplier-effect-container" style="display: none;">
+                    <div class="multiplier-timer">
+                        <div class="multiplier-text">⚡ 2x GOLD MULTIPLIER</div>
+                        <div class="multiplier-time" id="multiplier-time">60s</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gambling Wheel Modal -->
+    <div id="gamble-modal" class="gamble-modal" style="display: none;">
+        <div class="gamble-modal-content">
+            <h2>🎰 Spin the Wheel!</h2>
+            <div class="slot-machine-container">
+                <div class="slot-machine-main">
+                    <div class="slot-odds">
+                        <div class="odds-title">Odds:</div>
+                        <div class="odds-item">💰 1K: <span id="odds-1k">35%</span></div>
+                        <div class="odds-item">💰 5K: <span id="odds-5k">25%</span></div>
+                        <div class="odds-item">💰 25K: <span id="odds-10k">15%</span></div>
+                        <div class="odds-item">💎⬜💚 x30: <span id="odds-ores-50">10%</span></div>
+                        <div class="odds-item">💎⬜💚 x100: <span id="odds-ores-100">3%</span></div>
+                        <div class="odds-item">⚡ 2x Gold: <span id="odds-multiplier">2%</span></div>
+                        <div class="luck-upgrade-container">
+                            <button id="upgrade-slot-machine-luck" class="shop-button luck-button">
+                                <span class="button-text">🍀 Luck (Level <span id="luck-level">0</span>)</span>
+                                <span class="price" id="slot-machine-luck-price">10000</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="slot-reels">
+                        <div class="slot-reel" id="reel-1">
+                            <!-- Items will be dynamically generated for seamless looping -->
+                        </div>
+                    </div>
+                    <div class="slot-handle-container">
+                        <button id="pull-handle" class="slot-handle" type="button">
+                            <div class="handle-top"></div>
+                            <div class="handle-stem"></div>
+                            <div class="handle-base"></div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div id="gamble-result" class="gamble-result"></div>
+            <button id="close-gamble-modal" class="shop-button">Close</button>
+        </div>
+    </div>
+
+    <!-- Prestige Modal -->
+    <div id="prestige-modal" class="gamble-modal" style="display: none;">
+        <div class="gamble-modal-content" style="max-width: 900px; max-height: 90vh; overflow-y: auto;">
+            <h2>⭐ Prestige System</h2>
+            <div style="margin-bottom: 20px; padding: 15px; background: #1a1a1a; border-radius: 5px;">
+                <div style="margin-bottom: 10px;">
+                    <strong style="color: #ffd700;">Total Gold Earned:</strong> <span id="total-gold-earned">0</span>
+                </div>
+                <div style="margin-bottom: 10px;">
+                    <strong style="color: #ffd700;">Current Prestige Currency:</strong> <span id="prestige-currency">0</span>
+                </div>
+                <div style="margin-bottom: 10px;">
+                    <strong style="color: #ffd700;">Prestige Count:</strong> <span id="prestige-count">0</span>
+                </div>
+                <div style="color: #aaa; font-size: 0.9em;">
+                    <div>Next Prestige Token at: <span id="next-prestige-gold">10.00M</span> gold</div>
+                    <div>Remaining: <span id="prestige-remaining">10.00M</span> gold</div>
+                </div>
+            </div>
+            <div id="prestige-tree" style="display: grid; gap: 15px;">
+                <!-- Prestige nodes will be generated here -->
+            </div>
+            <div style="margin-top: 20px; text-align: center;">
+                <button id="prestige-button" class="shop-button" style="font-size: 18px; padding: 15px 30px; background: #ff6b6b;" disabled>
+                    Prestige (Requires 10M Gold)
+                </button>
+            </div>
+            <button id="close-prestige-modal" class="shop-button" style="margin-top: 10px;">Close</button>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
