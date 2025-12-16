@@ -20,15 +20,6 @@ An idle/clicker incremental game where you mine ores, hire dwarves, manage minec
 4. Hire dwarves and soldiers to automate your mining and defense
 5. Prestige when you've earned enough gold to gain permanent bonuses
 
-## Deployment
-
-This game is deployed using GitHub Pages. To deploy:
-
-1. Push your code to the `main` branch
-2. Go to Settings → Pages in your GitHub repository
-3. Select "main" branch and "/ (root)" folder
-4. Your game will be live at: `https://jdr1813.github.io/incremental-game/`
-
 ## Technologies
 
 - Pure HTML, CSS, and JavaScript
