@@ -97,6 +97,9 @@ const gameState = {
     lastHordeWaveTime: 0, // Last horde wave timestamp
     hordeWaveActive: false, // Whether a horde wave is currently active
     
+    // Audio settings
+    volume: 0.5, // Volume level (0.0 to 1.0)
+    
 };
 
 // Enemy types
@@ -319,6 +322,7 @@ function setupEventListeners() {
             gameState.gold -= gameState.clickPowerPrice;
             gameState.clickPower += 1;
             gameState.clickPowerPrice = Math.floor(gameState.clickPowerPrice * 1.5);
+            playUpgradeSound();
             updateUI();
             saveGame();
         }
@@ -330,6 +334,7 @@ function setupEventListeners() {
             gameState.gold -= price;
             gameState.autoClickerLevel = 1;
             gameState.autoClickerLastClick = Date.now();
+            playUpgradeSound();
             updateUI();
             saveGame();
         }
@@ -343,6 +348,7 @@ function setupEventListeners() {
             // Recalculate speed including prestige bonus
             recalculateAutoClickerSpeed();
             gameState.autoClickerSpeedPrice = Math.floor(gameState.autoClickerSpeedPrice * 1.3);
+            playUpgradeSound();
             renderAutoClickers(); // Update the display with new speed
             updateUI();
             saveGame();
@@ -354,6 +360,7 @@ function setupEventListeners() {
             gameState.gold -= gameState.dwarfPrice;
             gameState.dwarves++;
             gameState.dwarfPrice = Math.floor(gameState.dwarfPrice * 1.3);
+            playUpgradeSound();
             renderDwarves();
             updateUI();
             saveGame();
@@ -365,6 +372,7 @@ function setupEventListeners() {
             gameState.gold -= gameState.dwarfSpeedPrice;
             gameState.dwarfSpeed += 0.3; // Reduced from 0.5
             gameState.dwarfSpeedPrice = Math.floor(gameState.dwarfSpeedPrice * 1.5);
+            playUpgradeSound();
             updateUI();
             saveGame();
         }
@@ -376,6 +384,7 @@ function setupEventListeners() {
             gameState.gold -= gameState.soldierPrice;
             gameState.soldiers++;
             gameState.soldierPrice = Math.floor(gameState.soldierPrice * 1.4);
+            playUpgradeSound();
             renderSoldiers();
             updateUI();
             saveGame();
@@ -387,6 +396,7 @@ function setupEventListeners() {
             gameState.gold -= gameState.soldierAttackPowerPrice;
             gameState.soldierAttackPower += 2;
             gameState.soldierAttackPowerPrice = Math.floor(gameState.soldierAttackPowerPrice * 1.5);
+            playUpgradeSound();
             updateUI();
             saveGame();
         }
@@ -397,6 +407,7 @@ function setupEventListeners() {
             gameState.gold -= gameState.soldierAttackSpeedPrice;
             gameState.soldierAttackSpeed = Math.max(200, gameState.soldierAttackSpeed - 100); // Decrease by 100ms, min 200ms
             gameState.soldierAttackSpeedPrice = Math.floor(gameState.soldierAttackSpeedPrice * 1.5);
+            playUpgradeSound();
             updateUI();
             saveGame();
         }
@@ -407,6 +418,7 @@ function setupEventListeners() {
             gameState.gold -= gameState.soldierSpeedPrice;
             gameState.soldierSpeed += 0.3; // Increase movement speed by 0.3 (reduced from 0.5)
             gameState.soldierSpeedPrice = Math.floor(gameState.soldierSpeedPrice * 1.5);
+            playUpgradeSound();
             updateUI();
             saveGame();
         }
@@ -417,6 +429,7 @@ function setupEventListeners() {
             gameState.gold -= gameState.oreValuePrice;
             gameState.oreValueMultiplier += 0.5;
             gameState.oreValuePrice = Math.floor(gameState.oreValuePrice * 1.5);
+            playUpgradeSound();
             updateUI();
             saveGame();
         }
@@ -435,6 +448,7 @@ function setupEventListeners() {
             // Cap purchased efficiency at max purchasable
             gameState.oreSpawnEfficiency = Math.min(maxPurchasable, gameState.oreSpawnEfficiency + 0.05);
             gameState.oreSpawnEfficiencyPrice = Math.floor(gameState.oreSpawnEfficiencyPrice * 1.5);
+            playUpgradeSound();
             updateUI();
             saveGame();
         }
@@ -448,6 +462,7 @@ function setupEventListeners() {
                 gameState.gold -= gameState.slotMachineLuckPrice;
                 gameState.slotMachineLuck += 1;
                 gameState.slotMachineLuckPrice = Math.floor(gameState.slotMachineLuckPrice * 2.0);
+                playUpgradeSound();
                 updateUI();
                 updateSlotMachineOdds(); // Update odds display in modal
                 // Update luck level and price in modal
@@ -476,6 +491,7 @@ function setupEventListeners() {
                 deliveryCooldownEnd: null
             });
             gameState.minecartPrice = Math.floor(gameState.minecartPrice * 2.0); // More aggressive price increase
+            playUpgradeSound();
             renderMinecarts();
             updateUI();
             saveGame();
@@ -499,6 +515,7 @@ function setupEventListeners() {
             });
             // Increase price by 2000 each time
             gameState.minecartCapacityPrice = gameState.minecartCapacityPrice + 2000;
+            playUpgradeSound();
             renderMinecarts();
             updateUI();
             saveGame();
@@ -511,6 +528,7 @@ function setupEventListeners() {
             // Decrease cooldown by 300ms (faster delivery), minimum 2000ms (increased from 1000ms)
             gameState.minecartDeliverySpeed = Math.max(2000, gameState.minecartDeliverySpeed - 300);
             gameState.minecartDeliverySpeedPrice = Math.floor(gameState.minecartDeliverySpeedPrice * 1.5);
+            playUpgradeSound();
             updateUI();
             saveGame();
         }
@@ -590,6 +608,21 @@ function setupEventListeners() {
         openPrestigeModal();
     });
     
+    // Volume slider
+    const volumeSlider = document.getElementById('volume-slider');
+    const volumeValue = document.getElementById('volume-value');
+    if (volumeSlider && volumeValue) {
+        // Initialize volume from saved state or default to 50%
+        volumeSlider.value = (gameState.volume * 100).toString();
+        volumeValue.textContent = Math.round(gameState.volume * 100) + '%';
+        
+        volumeSlider.addEventListener('input', (e) => {
+            gameState.volume = parseFloat(e.target.value) / 100;
+            volumeValue.textContent = Math.round(gameState.volume * 100) + '%';
+            saveGame();
+        });
+    }
+    
     document.getElementById('close-prestige-modal')?.addEventListener('click', () => {
         closePrestigeModal();
     });
@@ -642,6 +675,9 @@ function handleRockClick(e) {
     
     // Show click effect at click position (show actual gold earned with multipliers)
     showClickEffect(clickX, clickY, '+' + goldEarned);
+    
+    // Play click sound
+    playClickSound();
     
     updateUI();
     saveGame();
@@ -904,21 +940,6 @@ function updateDwarves() {
     const containerRect = getCachedContainerRect('mining') || container.getBoundingClientRect();
     const now = Date.now();
     
-    // Find the best available minecart (not on cooldown, with most ores)
-    const availableMinecarts = gameState.minecarts.filter(m => {
-        const isOnCooldown = m.deliveryCooldownEnd && now < m.deliveryCooldownEnd;
-        return !isOnCooldown && m.items < m.capacity;
-    });
-    
-    // Sort by items (descending) - prioritize minecart with most ores
-    availableMinecarts.sort((a, b) => b.items - a.items);
-    const bestMinecart = availableMinecarts.length > 0 ? availableMinecarts[0] : null;
-    
-    const minecartX = bestMinecart && bestMinecart.element ? 
-        bestMinecart.element.getBoundingClientRect().left - containerRect.left + bestMinecart.element.getBoundingClientRect().width / 2 : 20;
-    const minecartY = bestMinecart && bestMinecart.element ? 
-        bestMinecart.element.getBoundingClientRect().top - containerRect.top + bestMinecart.element.getBoundingClientRect().height / 2 : 20;
-    
     // Assign ores to dwarves - each dwarf gets a different ore
     const availableOres = [...gameState.ores];
     const assignedOres = new Set();
@@ -939,39 +960,61 @@ function updateDwarves() {
             dwarf.y = dwarfY;
         }
         
-        // If carrying ore, go to best available minecart
+        // If carrying ore, go to nearest minecart (even if on cooldown) and wait if needed
         if (dwarf.carryingOre) {
-            if (bestMinecart) {
-                // There's an available minecart, go to it
-                const dx = minecartX - dwarfX;
-                const dy = minecartY - dwarfY;
-                const dist = Math.sqrt(dx * dx + dy * dy);
-                
-                if (dist < 30) {
-                    // Reached minecart - verify it's still available (not on cooldown, not full)
-                    if (bestMinecart) {
-                        const isOnCooldown = bestMinecart.deliveryCooldownEnd && now < bestMinecart.deliveryCooldownEnd;
-                        if (!isOnCooldown && bestMinecart.items < bestMinecart.capacity) {
-                            // Minecart is still available - deposit ore
-                            addToMinecart(dwarf.carryingOre.value, null);
-                            dwarf.carryingOre = null;
-                            dwarf.element.textContent = '⛏️';
-                            dwarf.element.classList.remove('carrying');
-                        }
-                        // If minecart is on cooldown or full, dwarf keeps holding ore
-                    }
-                } else {
-                    // Move towards minecart
-                    const speed = gameState.dwarfSpeed;
-                    if (dist > 0 && dwarf.element) {
-                        dwarf.x += (dx / dist) * speed;
-                        dwarf.y += (dy / dist) * speed;
-                        dwarf.element.style.left = (dwarf.x - 15) + 'px';
-                        dwarf.element.style.top = (dwarf.y - 15) + 'px';
-                    }
+            // Gather minecarts with positions (include those on cooldown/full so dwarves wait instead of dumping)
+            const candidates = gameState.minecarts
+                .filter(m => m.element)
+                .map(m => {
+                    const rect = m.element.getBoundingClientRect();
+                    const mx = rect.left - containerRect.left + rect.width / 2;
+                    const my = rect.top - containerRect.top + rect.height / 2;
+                    const dx = mx - dwarfX;
+                    const dy = my - dwarfY;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    const isOnCooldown = m.deliveryCooldownEnd && now < m.deliveryCooldownEnd;
+                    const isFull = m.items >= m.capacity;
+                    return { minecart: m, mx, my, dist, isOnCooldown, isFull };
+                });
+            
+            // Pick nearest minecart
+            candidates.sort((a, b) => a.dist - b.dist);
+            const target = candidates.length > 0 ? candidates[0] : null;
+            
+            // If no minecart elements exist (shouldn't happen), deposit directly to gold to avoid stalling
+            if (!target) {
+                addToMinecart(dwarf.carryingOre.value, null);
+                dwarf.carryingOre = null;
+                dwarf.element.textContent = '⛏️';
+                dwarf.element.classList.remove('carrying');
+                dwarf.targetOre = null;
+                dwarf.miningOre = null;
+                dwarf.oreMiningStartTime = null;
+                return;
+            }
+            
+            const dx = target.mx - dwarfX;
+            const dy = target.my - dwarfY;
+            const dist = target.dist;
+            
+            // Only deposit if the cart is ready (not on cooldown and not full)
+            const cartReady = !target.isOnCooldown && !target.isFull;
+            if (dist < 30 && cartReady) {
+                // Reached minecart - deposit ore
+                addToMinecart(dwarf.carryingOre.value, null);
+                dwarf.carryingOre = null;
+                dwarf.element.textContent = '⛏️';
+                dwarf.element.classList.remove('carrying');
+            } else {
+                // Move towards minecart and wait nearby if it's not ready yet
+                const speed = gameState.dwarfSpeed;
+                if (dist > 0 && dwarf.element) {
+                    dwarf.x += (dx / dist) * speed;
+                    dwarf.y += (dy / dist) * speed;
+                    dwarf.element.style.left = (dwarf.x - 15) + 'px';
+                    dwarf.element.style.top = (dwarf.y - 15) + 'px';
                 }
             }
-            // If no available minecart, dwarf keeps holding the ore (waiting)
         } else {
             // Get rock position for mining
             const rock = document.getElementById('central-rock');
@@ -1041,6 +1084,27 @@ function updateDwarves() {
                     if (oreDistances.length > 0) {
                         targetOre = oreDistances[0].ore;
                         dwarf.targetOre = targetOre; // Store persistent target
+                        assignedOres.add(targetOre.id);
+                    }
+                }
+            }
+            
+            // Fallback: if still no target but visible ores exist, pick the nearest visible ore (ignore targeting filters)
+            if (!targetOre && availableOres.length > 0) {
+                const visibleOres = availableOres.filter(ore => {
+                    return ore.element && ore.element.parentNode && ore.element.style.opacity !== '0';
+                });
+                if (visibleOres.length > 0) {
+                    const nearest = visibleOres
+                        .map(ore => {
+                            const dx = ore.x - dwarfX;
+                            const dy = ore.y - dwarfY;
+                            return { ore, distSq: dx * dx + dy * dy };
+                        })
+                        .sort((a, b) => a.distSq - b.distSq);
+                    if (nearest.length > 0) {
+                        targetOre = nearest[0].ore;
+                        dwarf.targetOre = targetOre;
                         assignedOres.add(targetOre.id);
                     }
                 }
@@ -1248,6 +1312,10 @@ function sendMinecartAway(minecart) {
     minecart.items = 0;
     minecart.totalValue = 0;
     minecart.deliveryCooldownEnd = now + gameState.minecartDeliverySpeed; // Set cooldown
+    
+    // Play minecart delivery sound
+    playMinecartSound();
+    
     renderMinecarts();
     updateUI();
     saveGame();
@@ -1326,6 +1394,7 @@ function unlockOre(oreId) {
     oreData.unlocked = true;
     oreData.lastSpawn = Date.now();
     
+    playUpgradeSound();
     renderOreShop();
     updateUI();
     saveGame();
@@ -1343,6 +1412,7 @@ function upgradeOreRate(oreId) {
     oreData.spawnRate = Math.max(1000, oreData.spawnRate - 500); // Reduce by 0.5 seconds, minimum 1 second
     oreData.spawnRatePrice = Math.floor(oreData.spawnRatePrice * 1.5);
     
+    playUpgradeSound();
     renderOreShop();
     updateUI();
     saveGame();
@@ -1358,6 +1428,7 @@ function upgradeOreChance(oreId) {
     oreData.spawnChance = Math.min(1.0, oreData.spawnChance + 0.05); // Increase by 5% instead of 10%
     oreData.spawnChancePrice = Math.floor(oreData.spawnChancePrice * 1.5);
     
+    playUpgradeSound();
     renderOreShop();
     updateUI();
     saveGame();
@@ -1372,6 +1443,7 @@ function upgradeOreValue(oreId) {
     oreData.valueMultiplier += 0.5;
     oreData.valuePrice = Math.floor(oreData.valuePrice * 1.5);
     
+    playUpgradeSound();
     renderOreShop();
     updateUI();
     saveGame();
@@ -2100,6 +2172,7 @@ function spinSlotMachine() {
     
     // Deduct cost immediately
     gameState.gold -= gameState.gamblePrice;
+    playSlotSpinSound();
     saveGame();
     updateUI();
     
@@ -2931,7 +3004,14 @@ function performPrestige() {
     
     saveGame();
     
-    alert(`Prestiged! Gained ${earnedCurrency} prestige currency.`);
+    // Play prestige sound before alert
+    playPrestigeSound();
+    
+    // Wait a moment for the sound to play, then show alert and reload
+    setTimeout(() => {
+        alert(`Prestiged! Gained ${earnedCurrency} prestige currency.`);
+        window.location.reload(); // Refresh the page to ensure a clean state
+    }, 500);
     
     // Refresh the page to ensure clean state after prestige
     location.reload();
@@ -3779,6 +3859,9 @@ function updateSoldiers() {
                             // Drop ore at enemy death location
                             dropOreFromEnemy(targetEnemy.x, targetEnemy.y);
                             
+                            // Play enemy kill sound
+                            playEnemyKillSound();
+                            
                             if (targetEnemy.element && targetEnemy.element.parentNode) {
                                 targetEnemy.element.remove();
                             }
@@ -4204,7 +4287,8 @@ function saveGame() {
         prestigeCurrency: gameState.prestigeCurrency,
         prestigeNodes: gameState.prestigeNodes,
         prestigeCount: gameState.prestigeCount,
-        prestigeGoldMultiplier: gameState.prestigeGoldMultiplier
+        prestigeGoldMultiplier: gameState.prestigeGoldMultiplier,
+        volume: gameState.volume
     };
     localStorage.setItem('miningGame', JSON.stringify(saveData));
 }
@@ -4341,9 +4425,19 @@ function loadGame() {
         // Always load totalGoldEarned from save if it exists, otherwise keep 0 (fresh start)
         gameState.totalGoldEarned = savedState.totalGoldEarned !== undefined ? savedState.totalGoldEarned : gameState.totalGoldEarned;
         gameState.prestigeCurrency = savedState.prestigeCurrency || 0;
+        gameState.volume = savedState.volume !== undefined ? savedState.volume : 0.5;
         gameState.prestigeNodes = savedState.prestigeNodes || {};
         gameState.prestigeCount = savedState.prestigeCount || 0;
         gameState.prestigeGoldMultiplier = savedState.prestigeGoldMultiplier || 1;
+        gameState.volume = savedState.volume !== undefined ? savedState.volume : 0.5;
+        
+        // Update volume slider if it exists
+        const volumeSlider = document.getElementById('volume-slider');
+        const volumeValue = document.getElementById('volume-value');
+        if (volumeSlider && volumeValue) {
+            volumeSlider.value = (gameState.volume * 100).toString();
+            volumeValue.textContent = Math.round(gameState.volume * 100) + '%';
+        }
         
         // Schedule horde wave if needed (only if enemies can spawn)
         const activeMinecarts = gameState.minecarts;
@@ -4354,6 +4448,225 @@ function loadGame() {
             scheduleNextHordeWave();
         }
     }
+}
+
+// ========== AUDIO SYSTEM ==========
+
+// Audio context for generating sounds
+let audioContext = null;
+
+// Initialize audio context (must be triggered by user interaction)
+function initAudioContext() {
+    if (!audioContext) {
+        try {
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        } catch (e) {
+            // Audio not supported
+            return false;
+        }
+    }
+    return true;
+}
+
+// Generate a click sound - modern, subtle click
+function playClickSound() {
+    if (!initAudioContext() || gameState.volume === 0) return;
+    
+    const now = audioContext.currentTime;
+    const volume = gameState.volume * 0.15;
+    
+    // Modern click: subtle, short, with a slight low-end thump
+    const clickOsc = audioContext.createOscillator();
+    const clickGain = audioContext.createGain();
+    
+    clickOsc.type = 'sine';
+    clickOsc.frequency.setValueAtTime(800, now);
+    clickOsc.frequency.exponentialRampToValueAtTime(600, now + 0.008);
+    
+    clickGain.gain.setValueAtTime(0, now);
+    clickGain.gain.linearRampToValueAtTime(volume, now + 0.001);
+    clickGain.gain.exponentialRampToValueAtTime(0.01, now + 0.008);
+    
+    clickOsc.connect(clickGain);
+    clickGain.connect(audioContext.destination);
+    
+    clickOsc.start(now);
+    clickOsc.stop(now + 0.008);
+}
+
+// Generate an ore collection sound - modern chime
+function playOreCollectSound() {
+    if (!initAudioContext() || gameState.volume === 0) return;
+    
+    const now = audioContext.currentTime;
+    const volume = gameState.volume * 0.18;
+    
+    // Modern chime: smooth, pleasant, with gentle attack
+    const chimeOsc = audioContext.createOscillator();
+    const chimeGain = audioContext.createGain();
+    
+    chimeOsc.type = 'sine';
+    chimeOsc.frequency.setValueAtTime(880, now); // A5
+    chimeOsc.frequency.exponentialRampToValueAtTime(1108, now + 0.12); // C#6
+    
+    chimeGain.gain.setValueAtTime(0, now);
+    chimeGain.gain.linearRampToValueAtTime(volume, now + 0.02);
+    chimeGain.gain.setValueAtTime(volume, now + 0.08);
+    chimeGain.gain.exponentialRampToValueAtTime(0.01, now + 0.12);
+    
+    chimeOsc.connect(chimeGain);
+    chimeGain.connect(audioContext.destination);
+    
+    chimeOsc.start(now);
+    chimeOsc.stop(now + 0.12);
+}
+
+// Generate an upgrade purchase sound - modern success sound
+function playUpgradeSound() {
+    if (!initAudioContext() || gameState.volume === 0) return;
+    
+    const now = audioContext.currentTime;
+    const volume = gameState.volume * 0.22;
+    
+    // Modern success sound: smooth ascending notes
+    const notes = [
+        { freq: 523.25, time: 0 },    // C5
+        { freq: 659.25, time: 0.08 },  // E5
+        { freq: 783.99, time: 0.16 }   // G5
+    ];
+    
+    notes.forEach((note, index) => {
+        const osc = audioContext.createOscillator();
+        const gain = audioContext.createGain();
+        
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(note.freq, now + note.time);
+        
+        gain.gain.setValueAtTime(0, now + note.time);
+        gain.gain.linearRampToValueAtTime(volume, now + note.time + 0.01);
+        gain.gain.setValueAtTime(volume, now + note.time + 0.15);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + note.time + 0.25);
+        
+        osc.connect(gain);
+        gain.connect(audioContext.destination);
+        
+        osc.start(now + note.time);
+        osc.stop(now + note.time + 0.25);
+    });
+}
+
+// Generate a minecart delivery sound - modern whoosh/chime
+function playMinecartSound() {
+    if (!initAudioContext() || gameState.volume === 0) return;
+    
+    const now = audioContext.currentTime;
+    const volume = gameState.volume * 0.2;
+    
+    // Modern delivery sound: pleasant chime with slight whoosh
+    const chimeOsc = audioContext.createOscillator();
+    const chimeGain = audioContext.createGain();
+    
+    chimeOsc.type = 'sine';
+    chimeOsc.frequency.setValueAtTime(440, now); // A4
+    chimeOsc.frequency.exponentialRampToValueAtTime(554, now + 0.15); // C#5
+    
+    chimeGain.gain.setValueAtTime(0, now);
+    chimeGain.gain.linearRampToValueAtTime(volume, now + 0.02);
+    chimeGain.gain.setValueAtTime(volume, now + 0.1);
+    chimeGain.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
+    
+    chimeOsc.connect(chimeGain);
+    chimeGain.connect(audioContext.destination);
+    
+    chimeOsc.start(now);
+    chimeOsc.stop(now + 0.15);
+}
+
+// Generate an enemy kill sound - modern impact
+function playEnemyKillSound() {
+    if (!initAudioContext() || gameState.volume === 0) return;
+    
+    const now = audioContext.currentTime;
+    const volume = gameState.volume * 0.2;
+    
+    // Modern impact: subtle thud with slight pitch drop
+    const impactOsc = audioContext.createOscillator();
+    const impactGain = audioContext.createGain();
+    
+    impactOsc.type = 'sine';
+    impactOsc.frequency.setValueAtTime(400, now);
+    impactOsc.frequency.exponentialRampToValueAtTime(250, now + 0.06);
+    
+    impactGain.gain.setValueAtTime(0, now);
+    impactGain.gain.linearRampToValueAtTime(volume, now + 0.002);
+    impactGain.gain.exponentialRampToValueAtTime(0.01, now + 0.06);
+    
+    impactOsc.connect(impactGain);
+    impactGain.connect(audioContext.destination);
+    
+    impactOsc.start(now);
+    impactOsc.stop(now + 0.06);
+}
+
+// Generate a prestige sound - modern triumphant sound
+function playPrestigeSound() {
+    if (!initAudioContext() || gameState.volume === 0) return;
+    
+    const now = audioContext.currentTime;
+    const volume = gameState.volume * 0.25;
+    
+    // Modern triumphant sound: smooth major chord with staggered start
+    const chord = [
+        { freq: 523.25, delay: 0 },    // C5
+        { freq: 659.25, delay: 0.03 },  // E5
+        { freq: 783.99, delay: 0.06 }   // G5
+    ];
+    
+    chord.forEach((note) => {
+        const osc = audioContext.createOscillator();
+        const gain = audioContext.createGain();
+        
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(note.freq, now + note.delay);
+        
+        gain.gain.setValueAtTime(0, now + note.delay);
+        gain.gain.linearRampToValueAtTime(volume, now + note.delay + 0.02);
+        gain.gain.setValueAtTime(volume, now + note.delay + 0.3);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + note.delay + 0.5);
+        
+        osc.connect(gain);
+        gain.connect(audioContext.destination);
+        
+        osc.start(now + note.delay);
+        osc.stop(now + note.delay + 0.5);
+    });
+}
+
+// Generate a slot machine spin sound - modern whoosh
+function playSlotSpinSound() {
+    if (!initAudioContext() || gameState.volume === 0) return;
+    
+    const now = audioContext.currentTime;
+    const volume = gameState.volume * 0.18;
+    
+    // Modern spin sound: smooth ascending whoosh
+    const spinOsc = audioContext.createOscillator();
+    const spinGain = audioContext.createGain();
+    
+    spinOsc.type = 'sine';
+    spinOsc.frequency.setValueAtTime(350, now);
+    spinOsc.frequency.exponentialRampToValueAtTime(500, now + 0.12);
+    
+    spinGain.gain.setValueAtTime(0, now);
+    spinGain.gain.linearRampToValueAtTime(volume, now + 0.02);
+    spinGain.gain.setValueAtTime(volume, now + 0.08);
+    spinGain.gain.exponentialRampToValueAtTime(0.01, now + 0.12);
+    
+    spinOsc.connect(spinGain);
+    spinGain.connect(audioContext.destination);
+    
+    spinOsc.start(now);
+    spinOsc.stop(now + 0.12);
 }
 
 // Start game when page loads
